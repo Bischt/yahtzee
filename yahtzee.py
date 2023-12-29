@@ -15,18 +15,31 @@ def main():
     """
     Simple dumb Yahtzee! game
     """
+    game_type = ""
     while True:
         print("\nWELCOME TO YAHTZEE!\n")
 
         print("Choose type of game:")
-        print("1) Standard")
+        print("1) Traditional")
         print("2) Top Down")
-        print("3) Head 2 Head")
+        print("3) Head-2-Head")
         print("4) One Roll")
-        game_choice = input("\nChoice? ")
 
-        if game_choice == "1" or game_choice == "2" or game_choice == "3" or game_choice == "4":
+        game_choice = int(input("\nChoice? ") or 1)
+
+        if game_choice == 1 or game_choice == 2 or game_choice == 3 or game_choice == 4:
+            if game_choice == 1:
+                game_type = "Traditional"
+            elif game_choice == 2:
+                game_type = "Top Down"
+            elif game_choice == 3:
+                game_type = "Head-2-Head"
+            elif game_choice == 4:
+                game_type = "One Roll"
+
             break
+
+    print(f"\nBeginning {game_type} game.")
 
     player1 = ScoreSheet()
 
@@ -284,6 +297,7 @@ class ScoreSheet:
         # Check upper scorecard for completeness, if completed calculate total/bonus
 
         # Check lower scorecard for completeness, if completed calculate total/bonus
+
 
 if __name__ == '__main__':
     main()
