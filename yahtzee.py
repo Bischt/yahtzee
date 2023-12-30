@@ -57,8 +57,24 @@ def main():
             die_hand = _roll(die_hand)
 
             # Display die roll to player
-            for die, val in die_hand.items():
-                print(f"{die}) {val}")
+            print(f"    (1)         (2)         (3)         (4)         (5)")
+
+            # Loop the 5 lines of the list containing the dice display
+            for die_image_line in range(0, 5):
+                # Loop through each die to display the correct image
+                for die_number in range(1, 6):
+                    # Will print out each display line on one line, at the end it'll conclude with a newline
+                    if die_number < 5:
+                        print(f"{_display_dice(die_hand[str(die_number)])[die_image_line]}", end=" ")
+                    else:
+                        print(f"{_display_dice(die_hand[str(die_number)])[die_image_line]}")
+
+            #print(f"{_display_dice(die_hand['1'])[0]}  {_display_dice(die_hand['2'])[0]}  {_display_dice(die_hand['3'])[0]}  {_display_dice(die_hand['4'])[0]}  {_display_dice(die_hand['5'])[0]}")
+            #print(f"{_display_dice(die_hand['1'])[1]}  {_display_dice(die_hand['2'])[1]}  {_display_dice(die_hand['3'])[1]}  {_display_dice(die_hand['4'])[1]}  {_display_dice(die_hand['5'])[1]}")
+            #print(f"{_display_dice(die_hand['1'])[2]}  {_display_dice(die_hand['2'])[2]}  {_display_dice(die_hand['3'])[2]}  {_display_dice(die_hand['4'])[2]}  {_display_dice(die_hand['5'])[2]}")
+            #print(f"{_display_dice(die_hand['1'])[3]}  {_display_dice(die_hand['2'])[3]}  {_display_dice(die_hand['3'])[3]}  {_display_dice(die_hand['4'])[3]}  {_display_dice(die_hand['5'])[3]}")
+            #print(f"{_display_dice(die_hand['1'])[4]}  {_display_dice(die_hand['2'])[4]}  {_display_dice(die_hand['3'])[4]}  {_display_dice(die_hand['4'])[4]}  {_display_dice(die_hand['5'])[4]}")
+
 
             if r < 3:
                 player_hold = input("\nHold? ")
@@ -91,6 +107,55 @@ def main():
         if player1.grand_total is not None:
             break
     print("\nGame Over!")
+
+
+def _display_dice(die_number):
+    dice_art = {
+        1: (
+            "┌─────────┐",
+            "│         │",
+            "│    ●    │",
+            "│         │",
+            "└─────────┘",
+        ),
+        2: (
+            "┌─────────┐",
+            "│  ●      │",
+            "│         │",
+            "│      ●  │",
+            "└─────────┘",
+        ),
+        3: (
+            "┌─────────┐",
+            "│  ●      │",
+            "│    ●    │",
+            "│      ●  │",
+            "└─────────┘",
+        ),
+        4: (
+            "┌─────────┐",
+            "│  ●   ●  │",
+            "│         │",
+            "│  ●   ●  │",
+            "└─────────┘",
+        ),
+        5: (
+            "┌─────────┐",
+            "│  ●   ●  │",
+            "│    ●    │",
+            "│  ●   ●  │",
+            "└─────────┘",
+        ),
+        6: (
+            "┌─────────┐",
+            "│  ●   ●  │",
+            "│  ●   ●  │",
+            "│  ●   ●  │",
+            "└─────────┘",
+        ),
+    }
+
+    return dice_art[die_number]
 
 
 def _roll(die_hand):
