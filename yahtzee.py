@@ -9,17 +9,21 @@
 #    win/lose decision based on which player scores the highest.  Number of wins matters, not score.
 
 from random import randint
+import os
 
 
 def main():
     """
     Simple dumb Yahtzee! game
     """
+
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+    _display_title()
+
     game_type = ""
     while True:
-        print("\nWELCOME TO YAHTZEE!\n")
-
-        print("Choose type of game:")
+        print("Choose type of game:\n")
         print("1) Traditional")
         print("2) Top Down")
         print("3) Head-2-Head")
@@ -69,12 +73,11 @@ def main():
                     else:
                         print(f"{_display_dice(die_hand[str(die_number)])[die_image_line]}")
 
-            #print(f"{_display_dice(die_hand['1'])[0]}  {_display_dice(die_hand['2'])[0]}  {_display_dice(die_hand['3'])[0]}  {_display_dice(die_hand['4'])[0]}  {_display_dice(die_hand['5'])[0]}")
-            #print(f"{_display_dice(die_hand['1'])[1]}  {_display_dice(die_hand['2'])[1]}  {_display_dice(die_hand['3'])[1]}  {_display_dice(die_hand['4'])[1]}  {_display_dice(die_hand['5'])[1]}")
-            #print(f"{_display_dice(die_hand['1'])[2]}  {_display_dice(die_hand['2'])[2]}  {_display_dice(die_hand['3'])[2]}  {_display_dice(die_hand['4'])[2]}  {_display_dice(die_hand['5'])[2]}")
-            #print(f"{_display_dice(die_hand['1'])[3]}  {_display_dice(die_hand['2'])[3]}  {_display_dice(die_hand['3'])[3]}  {_display_dice(die_hand['4'])[3]}  {_display_dice(die_hand['5'])[3]}")
-            #print(f"{_display_dice(die_hand['1'])[4]}  {_display_dice(die_hand['2'])[4]}  {_display_dice(die_hand['3'])[4]}  {_display_dice(die_hand['4'])[4]}  {_display_dice(die_hand['5'])[4]}")
-
+            # print(f"{_display_dice(die_hand['1'])[0]}  {_display_dice(die_hand['2'])[0]}  {_display_dice(die_hand['3'])[0]}  {_display_dice(die_hand['4'])[0]}  {_display_dice(die_hand['5'])[0]}")
+            # print(f"{_display_dice(die_hand['1'])[1]}  {_display_dice(die_hand['2'])[1]}  {_display_dice(die_hand['3'])[1]}  {_display_dice(die_hand['4'])[1]}  {_display_dice(die_hand['5'])[1]}")
+            # print(f"{_display_dice(die_hand['1'])[2]}  {_display_dice(die_hand['2'])[2]}  {_display_dice(die_hand['3'])[2]}  {_display_dice(die_hand['4'])[2]}  {_display_dice(die_hand['5'])[2]}")
+            # print(f"{_display_dice(die_hand['1'])[3]}  {_display_dice(die_hand['2'])[3]}  {_display_dice(die_hand['3'])[3]}  {_display_dice(die_hand['4'])[3]}  {_display_dice(die_hand['5'])[3]}")
+            # print(f"{_display_dice(die_hand['1'])[4]}  {_display_dice(die_hand['2'])[4]}  {_display_dice(die_hand['3'])[4]}  {_display_dice(die_hand['4'])[4]}  {_display_dice(die_hand['5'])[4]}")
 
             if r < 3:
                 player_hold = input("\nHold? ")
@@ -107,6 +110,19 @@ def main():
         if player1.grand_total is not None:
             break
     print("\nGame Over!")
+
+
+def _display_title():
+    title_art = (
+        ",   .     |    |                    |",
+        "|   |,---.|---.|--- ,---,,---.,---. |",
+        "`---',---||   ||     .-' |---'|---' |",
+        "  |  `---^`   '`---''---'`---'`---' o",
+        "  `                                 ",
+    )
+
+    for line in title_art:
+        print(line)
 
 
 def _display_dice(die_number):
