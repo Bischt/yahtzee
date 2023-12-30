@@ -221,31 +221,80 @@ class ScoreSheet:
         self.grand_total = None
 
     def display_scoresheet(self):
-        """
-        Display the current scoresheet details to stdout
-        """
-        print("~~SCORE SHEET~~")
-        print("\nUpper\n")
-        print(f"1) ONES: {self.ones}")
-        print(f"2) TWOS: {self.twos}")
-        print(f"3) THREES: {self.threes}")
-        print(f"4) FOURS: {self.fours}")
-        print(f"5) FIVES: {self.fives}")
-        print(f"6) SIXES: {self.sixes}")
-        print(f"\nUPPER SUBTOTAL: {self.upper_subtotal}")
-        print(f"BONUS: {self.upper_bonus}")
-        print(f"UPPER_TOTAL: {self.upper_total}")
+        score_sheet = (
+            f"┌───────────────────────────────┐",
+            f"│          SCORE SHEET          │",
+            f"└───────────────────────────────┘",
+            f"┌───────────────────────────────┐",
+            f"│ Select │ UPPER SECTION │ Score│",
+            f"│───────────────────────────────│",
+            f"│  (1)   │ Ones          │ {self._padded_output(self.ones)} │",
+            f"│  (2)   │ Twos          │ {self._padded_output(self.twos)} │",
+            f"│  (3)   │ Threes        │ {self._padded_output(self.threes)} │",
+            f"│  (4)   │ Fours         │ {self._padded_output(self.fours)} │",
+            f"│  (5)   │ Fives         │ {self._padded_output(self.fives)} │",
+            f"│  (6)   │ Sixes         │ {self._padded_output(self.sixes)} │",
+            f"│───────────────────────────────│",
+            f"│        │ TOTAL SCORE   │ {self._padded_output(self.upper_subtotal)} │",
+            f"│        │ BONUS         │ {self._padded_output(self.upper_bonus)} │",
+            f"│        │ TOTAL UPPER   │ {self._padded_output(self.upper_total)} │",
+            f"│───────────────────────────────│",
+            f"│        │ LOWER SECTION │      │",
+            f"│───────────────────────────────│",
+            f"│  (7)   │ 3 of a kind   │ {self._padded_output(self.three_of_kind)} │",
+            f"│  (8)   │ 4 of a kind   │ {self._padded_output(self.four_of_kind)} │",
+            f"│  (9)   │ Full House    │ {self._padded_output(self.full_house)} │",
+            f"│  (10)  │ Sm. Straight  │ {self._padded_output(self.sm_straight)} │",
+            f"│  (11)  │ Lg. Straight  │ {self._padded_output(self.lg_straight)} │",
+            f"│  (12)  │ YAHTZEE!      │ {self._padded_output(self.yahtzee)} │",
+            f"│  (13)  │ Chance        │ {self._padded_output(self.chance)} │",
+            f"│        │ Yahtzee! Bonus│ {self._padded_output(self.yahtzee_bonus)} │",
+            f"│───────────────────────────────│",
+            f"│        │ TOTAL LOWER   │ {self._padded_output(self.lower_subtotal)} │",
+            f"│        │ TOTAL UPPER   │ {self._padded_output(self.upper_total)} │",
+            f"│        │ GRAND TOTAL   │ {self._padded_output(self.grand_total)} │",
+            f"└───────────────────────────────┘",
+        )
 
-        print("\nLower\n")
-        print(f"7) Three of a kind: {self.three_of_kind}")
-        print(f"8) Four of a kind: {self.four_of_kind}")
-        print(f"9) Full House: {self.full_house}")
-        print(f"10) Small Straight: {self.sm_straight}")
-        print(f"11) Large Straight: {self.lg_straight}")
-        print(f"12) Yahtzee!: {self.yahtzee}")
-        print(f"Yahtzee! Bonus: {self.yahtzee_bonus}")
-        print(f"\nLOWER SUBTOTAL: {self.lower_subtotal}")
-        print(f"\nGRAND TOTAL: {self.grand_total}")
+        for line in score_sheet:
+            print(line)
+
+    def _padded_output(self, value, max_positions=4):
+
+        num_spaces = max_positions - len(str(value))
+
+        disp_string = str(value)
+        for x in range(0, num_spaces):
+            disp_string = disp_string + " "
+
+        return disp_string
+
+    #def display_scoresheet(self):
+    #    """
+    #    Display the current scoresheet details to stdout
+    #    """
+    #    print("~~SCORE SHEET~~")
+    #    print("\nUpper\n")
+    #    print(f"1) ONES: {self.ones}")
+    #    print(f"2) TWOS: {self.twos}")
+    #    print(f"3) THREES: {self.threes}")
+    #    print(f"4) FOURS: {self.fours}")
+    #    print(f"5) FIVES: {self.fives}")
+    #    print(f"6) SIXES: {self.sixes}")
+    #    print(f"\nUPPER SUBTOTAL: {self.upper_subtotal}")
+    #    print(f"BONUS: {self.upper_bonus}")
+    #    print(f"UPPER_TOTAL: {self.upper_total}")
+
+    #    print("\nLower\n")
+    #    print(f"7) Three of a kind: {self.three_of_kind}")
+    #    print(f"8) Four of a kind: {self.four_of_kind}")
+    #    print(f"9) Full House: {self.full_house}")
+    #    print(f"10) Small Straight: {self.sm_straight}")
+    #    print(f"11) Large Straight: {self.lg_straight}")
+    #    print(f"12) Yahtzee!: {self.yahtzee}")
+    #    print(f"Yahtzee! Bonus: {self.yahtzee_bonus}")
+    #    print(f"\nLOWER SUBTOTAL: {self.lower_subtotal}")
+    #    print(f"\nGRAND TOTAL: {self.grand_total}")
 
     def update_scoresheet(self, die_hand, field):
         """
