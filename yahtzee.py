@@ -108,6 +108,9 @@ def main():
         # Re-initialize die hand to get a fresh roll
         die_hand = {"1": None, "2": None, "3": None, "4": None, "5": None}
 
+        # If section is completed calculate totals
+        player1.validate_scoresheet()
+
         # End game scenario is when grand total has been calculated
         if player1.grand_total is not None:
             break
@@ -271,39 +274,12 @@ class ScoreSheet:
 
         return disp_string
 
-    #def display_scoresheet(self):
-    #    """
-    #    Display the current scoresheet details to stdout
-    #    """
-    #    print("~~SCORE SHEET~~")
-    #    print("\nUpper\n")
-    #    print(f"1) ONES: {self.ones}")
-    #    print(f"2) TWOS: {self.twos}")
-    #    print(f"3) THREES: {self.threes}")
-    #    print(f"4) FOURS: {self.fours}")
-    #    print(f"5) FIVES: {self.fives}")
-    #    print(f"6) SIXES: {self.sixes}")
-    #    print(f"\nUPPER SUBTOTAL: {self.upper_subtotal}")
-    #    print(f"BONUS: {self.upper_bonus}")
-    #    print(f"UPPER_TOTAL: {self.upper_total}")
-
-    #    print("\nLower\n")
-    #    print(f"7) Three of a kind: {self.three_of_kind}")
-    #    print(f"8) Four of a kind: {self.four_of_kind}")
-    #    print(f"9) Full House: {self.full_house}")
-    #    print(f"10) Small Straight: {self.sm_straight}")
-    #    print(f"11) Large Straight: {self.lg_straight}")
-    #    print(f"12) Yahtzee!: {self.yahtzee}")
-    #    print(f"Yahtzee! Bonus: {self.yahtzee_bonus}")
-    #    print(f"\nLOWER SUBTOTAL: {self.lower_subtotal}")
-    #    print(f"\nGRAND TOTAL: {self.grand_total}")
-
     def update_scoresheet(self, die_hand, field):
         """
         Perform validation and update scoresheet
         """
-        #print(f"DEBUG - DIE HAND: {die_hand}")
-        #print(f"DEBUG - FIELD: {field}")
+        # print(f"DEBUG - DIE HAND: {die_hand}")
+        # print(f"DEBUG - FIELD: {field}")
         print("\n")
         if field == "1":
             # Check to ensure this field is empty
@@ -525,10 +501,55 @@ class ScoreSheet:
             else:
                 print("You already have a Yahtzee!")
 
+        elif field == "13":
+            if not isinstance(self.chance, int):
+                self.chance = 0
+                for key, val in die_hand.items():
+                    self.chance = self.chance + val
+
+                print(f"Chance updated ... {self.chance} points!")
+                return True
+            else:
+                print("You already have chance")
         return False
+
+
+
+    def validate_scoresheet(self):
         # Check upper scorecard for completeness, if completed calculate total/bonus
+        if not isinstance(self.upper_subtotal, int):
+            if isinstance(self.ones, int) and isinstance(self.twos, int) and isinstance(self.threes, int) and isinstance(self.fours, int) and isinstance(self.fives, int) and isinstance(self.sixes, int):
+                self.upper_subtotal = self.ones + self.twos + self.threes + self.fours + self.fives + self.sixes
+                if self.upper_subtotal >= 63:
+                    self.upper_bonus = 35
+                else:
+                    self.upper_bonus = 0
+
+                self.upper_total = self.upper_subtotal + self.upper_bonus
+
+                print(f"\nUpper Section Complete!")
+                print(f"───────────────────────")
+                print(f"Subtotal: {self.upper_subtotal}")
+                if self.upper_bonus > 0:
+                    print(f"You got a bonus.  Extra 35 points.")
+                else:
+                    print(f"No bonus.  Subtotal of upper section < 63")
+                print(f"Upper Total: {self.upper_total}")
 
         # Check lower scorecard for completeness, if completed calculate total/bonus
+        if not isinstance(self.lower_subtotal, int):
+            if isinstance(self.three_of_kind, int) and isinstance(self.four_of_kind, int) and isinstance(self.full_house, int) and isinstance(self.sm_straight, int) and isinstance(self.lg_straight, int) and isinstance(self.yahtzee, int) and isinstance(self.chance, int):
+                self.lower_subtotal = self.three_of_kind + self.four_of_kind + self.full_house + self.sm_straight + self.lg_straight + self.yahtzee + self.chance
+
+                print(f"\nLower Section Complete!")
+                print(f"───────────────────────")
+                print(f"Subtotal: {self.lower_subtotal}")
+
+        # Check both section subtotals, if complete calculate grand total which ends the game
+        if isinstance(self.upper_total, int) and isinstance(self.lower_subtotal, int):
+            self.grand_total = self.upper_total + self.lower_subtotal
+
+            print(f"\nGRAND TOTAL: {self.grand_total}")
 
     def _has_sequence(self, check_list, seq_length):
         return any(list(check_list[i:i + seq_length]) == list(range(check_list[i], check_list[i] + seq_length))
