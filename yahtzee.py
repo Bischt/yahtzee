@@ -105,8 +105,10 @@ def main():
                         break
 
         turn = turn + 1
+        # Re-initialize die hand to get a fresh roll
+        die_hand = {"1": None, "2": None, "3": None, "4": None, "5": None}
 
-        player1.grand_total = 0
+        # End game scenario is when grand total has been calculated
         if player1.grand_total is not None:
             break
     print("\nGame Over!")
@@ -300,133 +302,237 @@ class ScoreSheet:
         """
         Perform validation and update scoresheet
         """
-        print(f"DEBUG - DIE HAND: {die_hand}")
-        print(f"DEBUG - FIELD: {field}")
-
+        #print(f"DEBUG - DIE HAND: {die_hand}")
+        #print(f"DEBUG - FIELD: {field}")
+        print("\n")
         if field == "1":
             # Check to ensure this field is empty
-            if not self.ones:
+            if not isinstance(self.ones, int):
+                self.ones = 0
                 # Validate there are actually values in the dice
                 if 1 in die_hand.values():
                     # Add all ones together
-                    self.ones = 0
                     for key, val in die_hand.items():
                         if die_hand[key] == 1:
                             self.ones = self.ones + die_hand[key]
-                    print(f"Ones Updated ... {self.ones} points!")
-                    return True
-                else:
-                    print("No ones found in hand")
+                print(f"Ones Updated ... {self.ones} points!")
+                return True
             else:
-                print("Field already filled")
+                print("You already have ones")
 
         elif field == "2":
             # Check to ensure this field is empty
-            if not self.twos:
+            if not isinstance(self.twos, int):
+                self.twos = 0
                 # Validate there are actually values in the dice
                 if 2 in die_hand.values():
                     # Add all ones together
-                    self.twos = 0
                     for key, val in die_hand.items():
                         if die_hand[key] == 2:
                             self.twos = self.twos + die_hand[key]
-                    print(f"Twos Updated ... {self.twos} points!")
-                    return True
-                else:
-                    print("No twos found in hand")
+                print(f"Twos Updated ... {self.twos} points!")
+                return True
             else:
-                print("Field already filled")
+                print("You already have twos")
 
         elif field == "3":
             # Check to ensure this field is empty
-            if not self.threes:
+            if not isinstance(self.threes, int):
+                self.threes = 0
                 # Validate there are actually values in the dice
                 if 3 in die_hand.values():
                     # Add all ones together
-                    self.threes = 0
                     for key, val in die_hand.items():
                         if die_hand[key] == 3:
                             self.threes = self.threes + die_hand[key]
-                    print(f"Threes Updated ... {self.threes} points!")
-                    return True
-                else:
-                    print("No threes found in hand")
+                print(f"Threes Updated ... {self.threes} points!")
+                return True
             else:
-                print("Field already filled")
+                print("You already have threes")
 
         elif field == "4":
             # Check to ensure this field is empty
-            if not self.fours:
+            if not isinstance(self.fours, int):
+                self.fours = 0
                 # Validate there are actually values in the dice
                 if 4 in die_hand.values():
                     # Add all ones together
-                    self.fours = 0
                     for key, val in die_hand.items():
                         if die_hand[key] == 4:
                             self.fours = self.fours + die_hand[key]
-                    print(f"Fours Updated ... {self.fours} points!")
-                    return True
-                else:
-                    print("No fours found in hand")
+                print(f"Fours Updated ... {self.fours} points!")
+                return True
             else:
-                print("Field already filled")
+                print("You already have fours")
 
         elif field == "5":
             # Check to ensure this field is empty
-            if not self.fives:
+            if not isinstance(self.fives, int):
+                self.fives = 0
                 # Validate there are actually values in the dice
                 if 5 in die_hand.values():
                     # Add all ones together
-                    self.fives = 0
                     for key, val in die_hand.items():
                         if die_hand[key] == 5:
                             self.fives = self.fives + die_hand[key]
-                    print(f"Fives Updated ... {self.fives} points!")
-                    return True
-                else:
-                    print("No fives found in hand")
+                print(f"Fives Updated ... {self.fives} points!")
+                return True
             else:
-                print("Field already filled")
+                print("You already have fives")
 
         elif field == "6":
             # Check to ensure this field is empty
-            if not self.sixes:
+            if not isinstance(self.sixes, int):
+                self.sixes = 0
                 # Validate there are actually values in the dice
                 if 6 in die_hand.values():
                     # Add all ones together
-                    self.sixes = 0
                     for key, val in die_hand.items():
                         if die_hand[key] == 6:
                             self.sixes = self.sixes + die_hand[key]
-                    print(f"Sixes Updated ... {self.sixes} points!")
-                    return True
-                else:
-                    print("No sixes found in hand")
+                print(f"Sixes Updated ... {self.sixes} points!")
+                return True
             else:
-                print("Field already filled")
+                print("You already have sixes")
 
         elif field == "7":
-            print("Three of a kind!")
+            # Check to ensure this field is empty
+            if not isinstance(self.three_of_kind, int):
+                num_val = {
+                    1: 0,
+                    2: 0,
+                    3: 0,
+                    4: 0,
+                    5: 0,
+                    6: 0,
+                }
+                # Populate dict of values
+                total_value = 0
+                for key, val in die_hand.items():
+                    num_val[val] = num_val[val] + val
+                    total_value = total_value + val
+
+                # Validate there are actually values in the dice
+                self.three_of_kind = 0
+                for key, val in num_val.items():
+                    if val / key >= 3:
+                        self.three_of_kind = total_value
+                print(f"Three of a kind updated ... {self.three_of_kind} points!")
+                return True
+            else:
+                print("You already have three of a kind")
 
         elif field == "8":
-            print("Four of a kind!")
+            # Check to ensure this field is empty
+            if not isinstance(self.four_of_kind, int):
+                num_val = {
+                    1: 0,
+                    2: 0,
+                    3: 0,
+                    4: 0,
+                    5: 0,
+                    6: 0,
+                }
+                # Populate dict of values
+                total_value = 0
+                for key, val in die_hand.items():
+                    num_val[val] = num_val[val] + val
+                    total_value = total_value + val
+
+                # Validate there are actually values in the dice
+                self.four_of_kind = 0
+                for key, val in num_val.items():
+                    if val / key >= 4:
+                        self.four_of_kind = total_value
+                print(f"Four of a kind updated ... {self.four_of_kind} points!")
+                return True
+            else:
+                print("You already have four of a kind")
 
         elif field == "9":
-            print("Full House!")
+            if not isinstance(self.full_house, int):
+                num_val = {
+                    1: 0,
+                    2: 0,
+                    3: 0,
+                    4: 0,
+                    5: 0,
+                    6: 0,
+                }
+                # Populate dict of values
+                for key, val in die_hand.items():
+                    num_val[val] = num_val[val] + val
+
+                # Validate there are actually values in the dice
+                self.full_house = 0
+                for key, val in num_val.items():
+                    if val / key == 3:
+                        for key, val in num_val.items():
+                            if val / key == 2:
+                                self.full_house = 25
+                print(f"Full house updated ... {self.full_house} points!")
+                return True
+            else:
+                print("You already have a full house")
 
         elif field == "10":
-            print("Small Straight")
+            if not isinstance(self.sm_straight, int):
+                self.sm_straight = 0
+                die_values = []
+                for key, val in die_hand.items():
+                    die_values.append(val)
+                if self._has_sequence(sorted(die_values), 3):
+                    self.sm_straight = 30
+                print(f"Small straight updated ... {self.sm_straight} points!")
+                return True
+            else:
+                print("You already have a small straight")
 
         elif field == "11":
-            print("Large Straight")
+            if not isinstance(self.lg_straight, int):
+                self.lg_straight = 0
+                die_values = []
+                for key, val in die_hand.items():
+                    die_values.append(val)
+                if self._has_sequence(sorted(die_values), 4):
+                    self.lg_straight = 40
+                print(f"Large straight updated ... {self.lg_straight} points!")
+                return True
+            else:
+                print("You already have a large straight")
 
         elif field == "12":
-            print("Yahtzee!")
+            if not isinstance(self.yahtzee, int):
+                num_val = {
+                    1: 0,
+                    2: 0,
+                    3: 0,
+                    4: 0,
+                    5: 0,
+                    6: 0,
+                }
+                # Populate dict of values
+                for key, val in die_hand.items():
+                    num_val[val] = num_val[val] + val
+
+                # Validate there are actually values in the dice
+                self.yahtzee = 0
+                for key, val in num_val.items():
+                    if val / key >= 5:
+                        self.yahtzee = 50
+                print(f"Yahtzee! updated ... {self.yahtzee} points!")
+                return True
+            else:
+                print("You already have a Yahtzee!")
 
         return False
         # Check upper scorecard for completeness, if completed calculate total/bonus
 
         # Check lower scorecard for completeness, if completed calculate total/bonus
+
+    def _has_sequence(self, check_list, seq_length):
+        return any(list(check_list[i:i + seq_length]) == list(range(check_list[i], check_list[i] + seq_length))
+                   for i in range(len(check_list) - seq_length + 1))
 
 
 if __name__ == '__main__':
