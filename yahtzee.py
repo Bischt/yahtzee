@@ -3,10 +3,11 @@
 # GAME MODES:
 # 1. Traditional: Players take turns and makes the optimal choice for the roll
 # 2. Waterfall: Each player goes down the list one by one and attempts to score the best in each line
-# 3. Head-2-Head: Each player goes down the list one by one but unlike Waterfall each line will be a
-#                 competition where the player with more points scores the victory (unless tie)
-# 4. One Roll: Each turn you will only get one roll before scoring
+# 3. One Roll: Each turn you will only get one roll before scoring
 #    win/lose decision based on which player scores the highest.  Number of wins matters, not score.
+# 4. Head-2-Head: Each player goes down the list one by one but unlike Waterfall each line will be a
+#                 competition where the player with more points scores the victory (unless tie)
+
 
 from random import randint
 import os
@@ -25,20 +26,17 @@ def main():
     while True:
         print("Choose type of game:\n")
         print("1) Traditional")
-        print("2) Top Down")
-        print("3) Head-2-Head")
-        print("4) One Roll")
+        print("2) Waterfall")
+        print("3) One Roll")
 
         game_choice = int(input("\nChoice? ") or 1)
 
-        if game_choice == 1 or game_choice == 2 or game_choice == 3 or game_choice == 4:
+        if game_choice == 1 or game_choice == 2 or game_choice == 3:
             if game_choice == 1:
                 game_type = "Traditional"
             elif game_choice == 2:
                 game_type = "Top Down"
             elif game_choice == 3:
-                game_type = "Head-2-Head"
-            elif game_choice == 4:
                 game_type = "One Roll"
 
             break
@@ -79,6 +77,10 @@ def main():
             # print(f"{_display_dice(die_hand['1'])[3]}  {_display_dice(die_hand['2'])[3]}  {_display_dice(die_hand['3'])[3]}  {_display_dice(die_hand['4'])[3]}  {_display_dice(die_hand['5'])[3]}")
             # print(f"{_display_dice(die_hand['1'])[4]}  {_display_dice(die_hand['2'])[4]}  {_display_dice(die_hand['3'])[4]}  {_display_dice(die_hand['4'])[4]}  {_display_dice(die_hand['5'])[4]}")
 
+            # One Roll game mode.  Just short circuit after the first roll
+            if game_choice == 3:
+                break
+
             if r < 3:
                 player_hold = input("\nHold? ")
 
@@ -94,15 +96,20 @@ def main():
 
         player1.display_scoresheet()
 
-        while True:
-            field = input("\nWhich field? ")
+        # Traditional game mode and One Roll game mode
+        if game_choice == 1 or game_choice == 3:
+            while True:
+                field = input("\nWhich field? ")
 
-            # If selected field not in range continue prompting player
-            if field:
-                if 1 <= int(field) <= 13:
-                    # If update operation failed continue prompting player
-                    if player1.update_scoresheet(die_hand, field):
-                        break
+                # If selected field not in range continue prompting player
+                if field:
+                    if 1 <= int(field) <= 13:
+                        # If update operation failed continue prompting player
+                        if player1.update_scoresheet(die_hand, field):
+                            break
+        # Waterfall Game Mode
+        elif game_choice == 2:
+            player1.update_scoresheet(die_hand, str(player1.get_next_available_field()))
 
         turn = turn + 1
         # Re-initialize die hand to get a fresh roll
@@ -121,6 +128,7 @@ def main():
 
     print("\nFINAL SCORE")
     player1.display_scoresheet()
+
 
 def _display_title():
     title_art = (
@@ -270,6 +278,18 @@ class ScoreSheet:
 
         for line in score_sheet:
             print(line)
+
+    def get_next_available_field(self):
+        next_available = 1
+        ordered_fields = [self.ones, self.twos, self.threes, self.fours, self.fives, self.sixes, self.three_of_kind,
+                          self.four_of_kind, self.full_house, self.sm_straight, self.lg_straight, self.yahtzee,
+                          self.chance]
+        for field in ordered_fields:
+            if isinstance(field, int):
+                # Field does exist so check the next
+                next_available = next_available + 1
+
+        return next_available
 
     def _padded_output(self, value, max_positions=4):
 
@@ -530,12 +550,13 @@ class ScoreSheet:
                 print("You already have chance")
         return False
 
-
-
     def validate_scoresheet(self):
         # Check upper scorecard for completeness, if completed calculate total/bonus
         if not isinstance(self.upper_subtotal, int):
-            if isinstance(self.ones, int) and isinstance(self.twos, int) and isinstance(self.threes, int) and isinstance(self.fours, int) and isinstance(self.fives, int) and isinstance(self.sixes, int):
+            if isinstance(self.ones, int) and isinstance(self.twos, int) and isinstance(self.threes,
+                                                                                        int) and isinstance(self.fours,
+                                                                                                            int) and isinstance(
+                    self.fives, int) and isinstance(self.sixes, int):
                 self.upper_subtotal = self.ones + self.twos + self.threes + self.fours + self.fives + self.sixes
                 if self.upper_subtotal >= 63:
                     self.upper_bonus = 35
@@ -555,7 +576,10 @@ class ScoreSheet:
 
         # Check lower scorecard for completeness, if completed calculate total/bonus
         if not isinstance(self.lower_subtotal, int):
-            if isinstance(self.three_of_kind, int) and isinstance(self.four_of_kind, int) and isinstance(self.full_house, int) and isinstance(self.sm_straight, int) and isinstance(self.lg_straight, int) and isinstance(self.yahtzee, int) and isinstance(self.chance, int):
+            if isinstance(self.three_of_kind, int) and isinstance(self.four_of_kind, int) and isinstance(
+                    self.full_house, int) and isinstance(self.sm_straight, int) and isinstance(self.lg_straight,
+                                                                                               int) and isinstance(
+                    self.yahtzee, int) and isinstance(self.chance, int):
                 self.lower_subtotal = self.three_of_kind + self.four_of_kind + self.full_house + self.sm_straight + self.lg_straight + self.yahtzee + self.chance
 
                 print(f"\nLower Section Complete!")
