@@ -111,11 +111,16 @@ def main():
         # If section is completed calculate totals
         player1.validate_scoresheet()
 
+        # Reset Yahtzee! Bonus cheat preventer
+        player1.bonus_this_turn = True
+
         # End game scenario is when grand total has been calculated
         if player1.grand_total is not None:
             break
     print("\nGame Over!")
 
+    print("\nFINAL SCORE")
+    player1.display_scoresheet()
 
 def _display_title():
     title_art = (
@@ -220,10 +225,12 @@ class ScoreSheet:
         self.lg_straight = None
         self.yahtzee = None
         self.chance = None
-        self.yahtzee_bonus = None
+        self.yahtzee_bonus = 0
         self.lower_subtotal = None
 
         self.grand_total = None
+
+        self.bonus_this_turn = True
 
     def display_scoresheet(self):
         score_sheet = (
@@ -499,7 +506,17 @@ class ScoreSheet:
                 print(f"Yahtzee! updated ... {self.yahtzee} points!")
                 return True
             else:
-                print("You already have a Yahtzee!")
+                # If there is already a Yahtzee! then add a Yahtzee! Bonus
+                # Will still return false because with a bonus you still need
+                # to select another field to fill in.
+                if self.bonus_this_turn:
+                    self.yahtzee_bonus = self.yahtzee_bonus + 100
+                    print(f"Another Yahtzee!11!  Yahtzee! Bonus: {self.yahtzee_bonus}")
+
+                    # Set flag that Yahtzee! Bonus was awarded so player can't cheat
+                    self.bonus_this_turn = False
+                else:
+                    print(f"Yahtzee! Bonus already awarded")
 
         elif field == "13":
             if not isinstance(self.chance, int):
